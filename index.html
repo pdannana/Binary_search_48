@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Visualization</title>
+    <style>
+        /* CSS styles for the entire page */
+        body {
+            background-color: #dbe4eb; /* Pastel Blue */
+            font-family: 'Urbanist', sans-serif; /* Urbanist font */
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            color: #333; /* Dark text color for better readability */
+            border: 4px solid #000; /* Black border */
+            position: relative; /* Relative positioning for pseudo-elements */
+        }
+
+        /* Header styles */
+        h1 {
+            font-size: 48px;
+            text-decoration: underline;
+            color: #140585; /* Hot Pink */
+            font-family: 'Urbanist', sans-serif; /* Urbanist font */
+            display: inline-block;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #321785; /* Hot Pink */
+        }
+
+        /* Container styles */
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            background-color: #FFDAB9; /* Peach Puff */
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        /* Step styles */
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        /* Array styles */
+        .array {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+        }
+
+        .element {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+        }
+
+        .highlighted {
+            background-color: #FF6347; /* Tomato */
+            color: #fff;
+        }
+
+        /* Description box styles */
+        .description-box {
+            background-color: #87CEEB; /* Sky Blue */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            font-family: 'Urbanist', sans-serif; /* Urbanist font */
+        }
+
+        /* Underline for description title */
+        .Decrption-heading {
+            font-size: 24px;
+            text-decoration: underline;
+        }
+
+        /* Bullet points */
+        .bullet-points {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        /* Start button styles */
+        #startButton {
+            background-color: #20B2AA; /* Light Sea Green */
+            color: #fff;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #startButton:hover {
+            background-color: #008080; /* Teal */
+        }
+
+        /* Celebration popup styles */
+        .celebration-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #262561; /* Gold */
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            z-index: 999;
+            display: none;
+        }
+
+        .arrow {
+            position: absolute;
+            margin-top: -15px;
+        }
+
+        .cross {
+            color: #FF0000; /* Red */
+            font-size: 24px;
+        }
+
+        /* Table styles */
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 80%;
+            background-color: #558fb8; /* Lemon Chiffon */
+            border: 2px solid #3b8498; /* Gold */
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #463fa8; /* Gold */
+            color: #fff;
+        }
+
+        td {
+            background-color: #FFFAF0; /* Floral White */
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .animated {
+            animation: fadeInOut 3s ease infinite;
+        }
+
+        /* Styles for the name at the right-top */
+        .name {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px; /* Smaller font size */
+            font-family: 'Roboto', sans-serif; /* Normal font */
+        }
+
+        /* Box for the description */
+        .description-box {
+            background-color: #87CEEB; /* Sky Blue */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        /* Bullet points */
+        .bullet-points {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #000;
+        }
+
+        /* Dropdown select styles */
+        .select-container {
+            margin-top: 20px;
+        }
+        /* Dropdown select box styles */
+.select-box {
+    border: 2px solid #20B2AA; /* Light Sea Green */
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #fff;
+    display: inline-block;
+}
+
+
+        select {
+            font-size: 16px;
+            padding: 10px;
+            border: 2px solid #20B2AA; /* Light Sea Green */
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /* Option content styles */
+        #optionContent {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        /* Gradient background elements */
+        #background-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(173, 216, 230, 0.9), rgba(255, 255, 255, 0.9), rgba(0, 0, 0, 0.9));
+            z-index: -1;
+        }
+
+        /* Moving circles */
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            border-radius: 50%;
+            animation: move 3s ease infinite;
+        }
+
+        /* Animation for moving circles */
+        @keyframes move {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(20px, 20px);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Name at right-top -->
+    <div class="name">Pravallika.D<br>vu21csen0100048</div>
+
+    <!-- Header -->
+    <h1><strong>BINARY SEARCH</strong></h1>
+
+    <!-- Description box -->
+    <div class="description-box">
+        <h2 class="prompt-heading"><u>Description</u></h2>
+        <ul class="bullet-points">
+            <li>Binary Search is a searching algorithm that works on a sorted array.</li>
+            <li>At every iteration, it finds the middle element of the array using <code>(low + high) / 2</code>.</li>
+            <li>If the middle element is equal to the key, the search stops.</li>
+            <li>If the middle element is greater than the key, the search continues in the first half. Otherwise, the search continues in the second half. It has a best-case complexity of O(1), average, and worst-case complexity of O(log n).</li>
+        </ul>
+    </div>
+
+    <!-- Container -->
+    <div id="container">
+        <button id="startButton" onclick="startVisualization()">Start Visualization</button>
+        <!-- Visualization will go here -->
+    </div>
+
+    <!-- Celebration popup -->
+    <div id="celebrationPopup" class="celebration-popup animated">
+        <p>Bingo! Target found at index <span id="bingoIndex"></span>.</p>
+    </div>
+
+    <!-- Dropdown select for options -->
+    <div class="select-container">
+        <label for="selectOption">Choose an option:</label>
+        <select id="selectOption" onchange="changeOption()">
+            <option value="algorithm">Algorithm</option>
+            <option value="pseudocode">Pseudocode</option>
+            <option value="complexity">Complexity</option>
+            <option value="examples">Real-life Examples</option>
+        </select>
+    </div>
+
+    <!-- Option content -->
+    <div id="optionContent"></div>
+
+    <script>
+        let animationDelay = 1000;
+        let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        let target = 7;
+
+        async function binarySearch() {
+            let low = 0;
+            let high = array.length - 1;
+            let steps = [];
+
+            while (low <= high) {
+                let mid = Math.floor(low + (high - low) / 2);
+                steps.push({ low, mid, high });
+
+                if (array[mid] === target) {
+                    steps.push({ found: mid });
+                    return steps;
+                } else if (array[mid] < target) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+
+            steps.push({ notFound: true });
+            return steps;
+        }
+
+        async function startVisualization() {
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("bingoIndex").textContent = "";
+
+            const steps = await binarySearch();
+            const container = document.getElementById("container");
+            container.innerHTML = '';
+
+            // Create a table for calculations
+            const table = document.createElement("table");
+            const tableHeader = document.createElement("tr");
+            tableHeader.innerHTML = "<th>Step</th><th>Low</th><th>Mid</th><th>High</th><th>Element</th><th>Comparison</th>";
+            table.appendChild(tableHeader);
+
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                displayStep(step, container, table, i);
+                await sleep(animationDelay);
+            }
+
+            container.appendChild(table);
+
+            document.getElementById("startButton").disabled = false;
+
+            if (steps[steps.length - 1].found !== undefined) {
+                const index = steps[steps.length - 1].found;
+                document.getElementById("bingoIndex").textContent = index;
+                document.getElementById("celebrationPopup").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("celebrationPopup").style.display = "none";
+                }, 3000);
+            }
+        }
+
+        function displayStep(step, container, table, stepNumber) {
+            const stepDiv = document.createElement("div");
+            stepDiv.className = "step";
+
+            const arrayDiv = document.createElement("div");
+            arrayDiv.className = "array";
+
+            for (let i = 0; i < array.length; i++) {
+                const element = document.createElement("div");
+                element.className = "element";
+                element.textContent = array[i];
+
+                if (step.found === i) {
+                    element.classList.add("highlighted");
+                } else if (step.low <= i && i <= step.high) {
+                    element.classList.add("highlighted");
+                }
+
+                arrayDiv.appendChild(element);
+            }
+
+            stepDiv.appendChild(arrayDiv);
+
+            if (step.found !== undefined) {
+                const explanation = document.createElement("div");
+                explanation.className = "explanation";
+                explanation.textContent = `Element ${target} found at index ${step.found}.`;
+                stepDiv.appendChild(explanation);
+            } else if (step.notFound) {
+                const explanation = document.createElement("div");
+                explanation.className = "explanation";
+                explanation.textContent = `Element ${target} not found in the array.`;
+                stepDiv.appendChild(explanation);
+            }
+
+            if (step.low !== undefined || step.high !== undefined) {
+                const explanation = document.createElement("div");
+                explanation.className = "explanation";
+                explanation.textContent = `Current Search Range: [low: ${step.low}, high: ${step.high}].`;
+                stepDiv.appendChild(explanation);
+            }
+
+            if (step.mid !== undefined) {
+                const explanation = document.createElement("div");
+                explanation.className = "explanation";
+                explanation.textContent = `Mid: ${step.mid} (${array[step.mid]})`;
+                stepDiv.appendChild(explanation);
+            }
+
+            // Arrow to indicate mid
+            if (step.low !== undefined && step.high !== undefined) {
+                const arrow = document.createElement("div");
+                arrow.className = "arrow";
+                const midPosition = (step.low + step.high) / 2;
+                arrow.style.left = `${midPosition * 50}px`;
+                stepDiv.appendChild(arrow);
+            }
+
+            // Cross for comparison
+            if (step.low !== undefined && step.high !== undefined) {
+                const comparison = document.createElement("div");
+                comparison.className = "cross";
+                comparison.textContent = "✘";
+                const midPosition = (step.low + step.high) / 2;
+                comparison.style.left = `${midPosition * 50}px`;
+                stepDiv.appendChild(comparison);
+            }
+
+            container.appendChild(stepDiv);
+
+            // Add step to the table
+            const tableRow = document.createElement("tr");
+            tableRow.innerHTML = `<td>${stepNumber + 1}</td><td>${step.low}</td><td>${step.mid}</td><td>${step.high}</td><td>${target}</td><td>${step.mid < target ? "<" : (step.mid > target ? ">" : "=")}</td>`;
+            table.appendChild(tableRow);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function changeOption() {
+            const select = document.getElementById("selectOption");
+            const selectedOption = select.value;
+            const optionContent = document.getElementById("optionContent");
+
+            switch (selectedOption) {
+                case "algorithm":
+                    optionContent.innerHTML = `
+                        <p><strong>Algorithm:</strong></p>
+                        <pre>
+- Define a function called binary_search that takes three parameters: an array of sorted elements, a target value, and the size of the array.
+- Initialize two variables: left and right, to store the indices of the first and last elements of the array, respectively.
+- Start a loop that repeats until left is greater than right.
+- Inside the loop, calculate the middle index by adding left and right and dividing by two.
+- Compare the middle element of the array with the target value.
+- If they are equal, return the middle index as the result and exit the loop.
+- If the target value is greater than the middle element, update left to be one more than the middle index.
+- If the target value is less than the middle element, update right to be one less than the middle index.
+- End the loop.
+- If the loop ends without finding the target value, return -1 as the result to indicate that the value is not in the array.</pre>
+                    `;
+                    break;
+                case "pseudocode":
+                    optionContent.innerHTML = `
+                        <p><strong>Pseudocode:</strong></p>
+                        <pre>
+binary_search(array, target, size):
+    left = 0
+    right = size - 1
+    while left <= right:
+        middle = (left + right) / 2
+        if array[middle] == target:
+            return middle
+        else if target > array[middle]:
+            left = middle + 1
+        else:
+            right = middle - 1
+    return -1
+                    </pre>
+                    `;
+                    break;
+                case "complexity":
+                    optionContent.innerHTML = `
+                        <p><strong>Complexity:</strong></p>
+                        <p>Best Case Complexity - In Binary search, the best case occurs when the element to search is found in the first comparison, i.e., when the first middle element itself is the element to be searched. The best-case time complexity of Binary search is O(1).</p>
+                        <p>Average Case Complexity - The average case time complexity of Binary search is O(logn).</p>
+                        <p>Worst Case Complexity - In Binary search, the worst case occurs when we have to keep reducing the search space till it has only one element. The worst-case time complexity of Binary search is O(logn).</p>
+                    `;
+                    break;
+                case "examples":
+                    optionContent.innerHTML = `
+                        <p><strong>Real-life Examples:</strong></p>
+                        <ul>
+                            <li>Binary search can be used to find a name in a phone book by comparing the name with the middle entry and then looking at either the left or right half of the phone book.</li>
+                            <li>Binary search can be used to find a word in a crossword puzzle by comparing the word with the middle clue and then moving up or down on the puzzle.</li>
+                            <li>Binary search can be used to find a song in a playlist by comparing the song with the middle song and then skipping forward or backward in the playlist.</li>
+                        </ul>
+                    `;
+                    break;
+                    
+                default:
+                    optionContent.innerHTML = "";
+            }
+
+        }
+
+
+    </script>
+    <video src="Binary Search animated.mp4" width="500"  controls> video not supported</video>
+</body>
+</html>
+
+
